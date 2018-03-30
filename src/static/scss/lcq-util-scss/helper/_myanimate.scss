@@ -1,0 +1,256 @@
+@charset "UTF-8";
+
+@mixin li2-flipInX() {
+	@include keyframes(li2flipInX) {
+		0% {
+			@include transform(perspective(400px) rotateX(90deg) translateY(-50%));
+			opacity: 0;
+		}
+		40% {
+			@include transform(perspective(400px) rotateX(-10deg) translateY(-50%));
+		}
+		70% {
+			@include transform(perspective(400px) rotateX(10deg) translateY(-50%));
+		}
+		100% {
+			@include transform(perspective(400px) rotateX(0deg) translateY(-50%));
+			opacity: 1;
+		}
+	}
+	.li2flipInX {
+		@include animation-name(li2flipInX);
+		@include backface-visibility(visible);
+		@extend %animated;
+	}
+}
+
+@mixin animate-clipme($cling:0%,$size:5px,$clr:#e4007f) {
+	@include keyframes(clipMe) {
+		0%, 100% {
+			-webkit-clip: rect(0px, 220px, 2px, 0px);
+			clip: rect(0px, 220px, 2px, 0px);
+		}
+		25% {
+			-webkit-clip: rect(0px, 2px, 220px, 0px);
+			clip: rect(0px, 2px, 220px, 0px);
+		}
+		50% {
+			-webkit-clip: rect(218px, 220px, 220px, 0px);
+			clip: rect(218px, 220px, 220px, 0px);
+		}
+		75% {
+			-webkit-clip: rect(0px, 220px, 220px, 218px);
+			clip: rect(0px, 220px, 220px, 218px);
+		}
+	}
+	.clipme {
+		@include animation-name(clipMe);
+		//动画
+		&:before, &:after {
+			position: absolute;
+			top: 0;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			border-radius: 50%;
+			content: " ";
+			z-index: -1;
+			//margin表示距离border的远近，0为贴紧
+			margin: $cling;
+			box-shadow: 0 0 0 $size $clr inset;
+			animation: clipMe 5s linear infinite;
+		}
+		&:before {
+			-webkit-animation-delay: -1s;
+			animation-delay: -1s;
+		}
+	}
+}
+
+//火焰特效
+//https://codepen.io/dazulu/pen/fGFyj?q=flame+&limit=all&type=type-pens
+@mixin animate-flameTopL($translateX,$translateY,$duration,$delay) {
+	@include keyframes(flametopleft) {
+		0% {
+			transform: translateX($translateX) translateY($translateY) rotate(-1deg);
+		}
+		20% {
+			transform: translateX($translateX) translateY($translateY) rotate(1deg);
+		}
+		40% {
+			transform: translateX($translateX) translateY($translateY) rotate(-1deg);
+		}
+		60% {
+			transform: translateX($translateX) translateY($translateY) rotate(1deg) scaleY(1.04);
+		}
+		80% {
+			transform: translateX($translateX) translateY($translateY) rotate(-2deg) scaleY(0.92);
+		}
+		100% {
+			transform: translateX($translateX) translateY($translateY) rotate(1deg);
+		}
+	}
+	.flametopleft {
+		@include animation-name(flametopleft);
+		@include animation-duration($duration);
+		@include animation-delay($delay);
+		@include animation-timing-function(ease-in);
+		@include animation-iteration-count(infinite);
+		@include animation-direction(alternate);
+	}
+}
+
+@mixin animate-flameTopC($translateX,$translateY,$duration,$delay) {
+	@include keyframes(flametopcenter) {
+		0% {
+			transform: translateX($translateX) translateY($translateY) rotate(-1deg);
+		}
+		20% {
+			transform: translateX($translateX) translateY($translateY) rotate(1deg);
+		}
+		40% {
+			transform: translateX($translateX) translateY($translateY) rotate(-1deg);
+		}
+		60% {
+			transform: translateX($translateX) translateY($translateY) rotate(1deg) scaleY(1.04);
+		}
+		80% {
+			transform: translateX($translateX) translateY($translateY) rotate(-2deg) scaleY(0.92);
+		}
+		100% {
+			transform: translateX($translateX) translateY($translateY) rotate(1deg);
+		}
+	}
+	.flametopcenter {
+		@include animation-name(flametopcenter);
+		@include animation-duration($duration);
+		@include animation-delay($delay);
+		@include animation-timing-function(ease-in);
+		@include animation-iteration-count(infinite);
+		@include animation-direction(alternate);
+	}
+}
+
+@mixin animate-flameTopR($translateX,$translateY,$duration,$delay) {
+	@include keyframes(flametopright) {
+		0% {
+			transform: translateX($translateX) translateY($translateY) rotate(-1deg) rotateY(180deg);
+		}
+		20% {
+			transform: translateX($translateX) translateY($translateY) rotate(1deg) rotateY(180deg);
+		}
+		40% {
+			transform: translateX($translateX) translateY($translateY) rotate(-1deg) rotateY(180deg);
+		}
+		60% {
+			transform: translateX($translateX) translateY($translateY) rotate(1deg) rotateY(180deg) scaleY(1.04);
+		}
+		80% {
+			transform: translateX($translateX) translateY($translateY) rotate(-2deg) rotateY(180deg) scaleY(0.92);
+		}
+		100% {
+			transform: translateX($translateX) translateY($translateY) rotate(1deg) rotateY(180deg);
+		}
+	}
+	.flametopright {
+		@include animation-name(flametopright);
+		@include animation-duration($duration);
+		@include animation-delay($delay);
+		@include animation-timing-function(ease-in);
+		@include animation-iteration-count(infinite);
+		@include animation-direction(alternate);
+	}
+}
+
+@mixin animate-flameBotL($translateX,$translateY,$duration,$delay,$deg:0) {
+	@include keyframes(flamebotleft) {
+		0% {
+			transform: translateX($translateX) translateY($translateY) rotate(-1deg+$deg) rotateX(180deg);
+		}
+		20% {
+			transform: translateX($translateX) translateY($translateY) rotate(1deg+$deg) rotateX(180deg);
+		}
+		40% {
+			transform: translateX($translateX) translateY($translateY) rotate(-1deg+$deg) rotateX(180deg);
+		}
+		60% {
+			transform: translateX($translateX) translateY($translateY) rotate(1deg+$deg) scaleY(1.04) rotateX(180deg);
+		}
+		80% {
+			transform: translateX($translateX) translateY($translateY) rotate(-2deg+$deg) scaleY(0.92) rotateX(180deg);
+		}
+		100% {
+			transform: translateX($translateX) translateY($translateY) rotate(1deg+$deg) rotateX(180deg);
+		}
+	}
+	.flamebotleft {
+		@include animation-name(flamebotleft);
+		@include animation-duration($duration);
+		@include animation-delay($delay);
+		@include animation-timing-function(ease-in);
+		@include animation-iteration-count(infinite);
+		@include animation-direction(alternate);
+	}
+}
+
+@mixin animate-flameBotC($translateX,$translateY,$duration,$delay) {
+	@include keyframes(flamebotcenter) {
+		0% {
+			transform: translateX($translateX) translateY($translateY) rotate(-1deg) rotateX(180deg);
+		}
+		20% {
+			transform: translateX($translateX) translateY($translateY) rotate(1deg) rotateX(180deg);
+		}
+		40% {
+			transform: translateX($translateX) translateY($translateY) rotate(-1deg) rotateX(180deg);
+		}
+		60% {
+			transform: translateX($translateX) translateY($translateY) rotate(1deg) scaleY(1.04) rotateX(180deg);
+		}
+		80% {
+			transform: translateX($translateX) translateY($translateY) rotate(-2deg) scaleY(0.92) rotateX(180deg);
+		}
+		100% {
+			transform: translateX($translateX) translateY($translateY) rotate(1deg) rotateX(180deg);
+		}
+	}
+	.flamebotcenter {
+		@include animation-name(flamebotcenter);
+		@include animation-duration($duration);
+		@include animation-delay($delay);
+		@include animation-timing-function(ease-in);
+		@include animation-iteration-count(infinite);
+		@include animation-direction(alternate);
+	}
+}
+
+@mixin animate-flameBotR($translateX,$translateY,$duration,$delay,$deg:0) {
+	@include keyframes(flamebotright) {
+		0% {
+			transform: translateX($translateX) translateY($translateY) rotateX(180deg) rotateY(180deg);
+		}
+		20% {
+			transform: translateX($translateX) translateY($translateY) rotateX(182deg) rotateY(180deg);
+		}
+		40% {
+			transform: translateX($translateX) translateY($translateY) rotateX(180deg) rotateY(180deg);
+		}
+		60% {
+			transform: translateX($translateX) translateY($translateY) scaleY(1.04) rotateX(182deg) rotateY(180deg);
+		}
+		80% {
+			transform: translateX($translateX) translateY($translateY) scaleY(0.92) rotateX(179deg) rotateY(180deg);
+		}
+		100% {
+			transform: translateX($translateX) translateY($translateY) rotateX(182deg) rotateY(180deg);
+		}
+	}
+	.flamebotright {
+		@include animation-name(flamebotright);
+		@include animation-duration($duration);
+		@include animation-delay($delay);
+		@include animation-timing-function(ease-in);
+		@include animation-iteration-count(infinite);
+		@include animation-direction(alternate);
+	}
+}

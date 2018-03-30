@@ -1,0 +1,362 @@
+//spacing
+$grid: 4px; //一格
+$box-large-gap: 3 * $grid; //大一点的间隙
+$box-small-gap: 2 * $grid; //小间隙
+
+//色彩 Color
+//主色调
+$black: #000; //主导航图标 系统图标 标题 正文
+$gray1: #646464; //管理图标
+$gray: #969696; //辅助信息
+$gray2: #aaa; //主导航图标
+$gray3: #bebebe; //文字禁用态
+$gray4: #e6e6e6; //搜索框 分割线
+$gray5: #f5f5f5; //背景色
+$white: #fff; //卡片
+
+//辅助色
+$blue: #1d82ff; //控件 文字链 工具类
+$green: #46c800; //完成态 系统类
+$orange: #f3b200; //高亮提示 优惠券
+$red: #fe5c46; //警示提示 娱乐类
+$darkgray: #bebebe;
+$middlegray: #e6e6e6;
+$lightgray: #f5f5f5;
+
+//function
+@function px($px) {
+	@return $px/12*$grid;
+}
+
+@function grid($num) {
+	@return $num*$grid;
+}
+
+//内联SVG函数
+@function str-replace($string, $search, $replace: '') {
+	$index: str-index($string, $search);
+	@if $index {
+		@return str-slice($string, 1, $index - 1) + $replace +
+        str-replace(str-slice($string, $index + 
+        str-length($search)), $search, $replace);
+	}
+	@return $string;
+}
+
+@function svg-url($svg) {
+	$encoded: '';
+	$slice: 2000;
+	$index: 0;
+	$loops: ceil(str-length($svg)/$slice);
+	@for $i from 1 through $loops {
+		$chunk: str-slice($svg, $index, $index + $slice - 1);
+		$chunk: str-replace($chunk, '"', '\'');
+		$chunk: str-replace($chunk, '<', '%3C');
+		$chunk: str-replace($chunk, '>', '%3E');
+		$chunk: str-replace($chunk, '&', '%26');
+		$chunk: str-replace($chunk, '#', '%23');
+		$chunk: str-replace($chunk, ' ', '%20'); //空格
+		$encoded: #{$encoded}#{$chunk};
+		$index: $index + $slice;
+	}
+	@return url("data:image/svg+xml;charset=utf8,#{$encoded}");
+}
+
+@function svg-rectangle($color: $blue, $radius: '2', $strokeWidth: '1', $width: '100%', $height: '100%') {
+	@return svg-url('<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><defs><clipPath id="clip"><rect rx="#{$radius}" ry="#{$radius}" width="100%" height="100%"/></clipPath></defs><rect width="100%" height="100%" rx="#{$radius}" ry="#{$radius}" fill="none" stroke="#{$color}" stroke-width="#{$strokeWidth}" clip-path="url(#clip)"/></svg>');
+}
+
+@function svg-line($color: $middlegray, $width: '100%', $height: '0.5', $y: '0') {
+	@return svg-url('<svg xmlns="http://www.w3.org/2000/svg"><rect y="#{$y}" width="#{$width}" height="#{$height}" fill="#{$color}"/></svg>');
+}
+
+//多行文字
+@mixin ellipsis-more($num: 2) {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: $num;
+}
+
+//@mixin ellipsis {
+//	white-space: nowrap;
+//	overflow: hidden;
+//	text-overflow: ellipsis;
+//}
+
+
+%ellipsis {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+@mixin ellipsis-two {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 2;
+}
+
+%ellipsis-two {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 2;
+}
+
+
+@mixin text16 {
+	line-height: grid(6);
+	font-size: grid(4);
+}
+
+//约定文字大小
+@mixin text14 {
+	line-height: grid(5.5);
+	font-size: grid(3.5);
+}
+
+@mixin text12 {
+	line-height: grid(4.5);
+	font-size: grid(3);
+}
+
+@mixin text10 {
+	line-height: grid(3.5);
+	font-size: grid(2.5);
+	color: #969696;
+}
+
+//无框文字辅助
+@mixin text48($top:0, $right:$top, $bottom:$top, $left:$right) {
+	line-height: grid(6);
+	font-size: grid(4);
+	margin: (-(grid(6) - grid(4))/2 + grid($top)) grid($right) (-(grid(6) - grid(4))/2 + grid($bottom)) grid($left);
+	-webkit-margin-collapse: separate;
+	margin-collapse: separate;
+}
+
+@mixin text42($top:0, $right:$top, $bottom:$top, $left:$right) {
+	line-height: grid(5.5);
+	font-size: grid(3.5);
+	margin: (-(grid(5.5) - grid(3.5))/2 + grid($top)) grid($right) (-(grid(5.5) - grid(3.5))/2 + grid($bottom)) grid($left);
+	-webkit-margin-collapse: separate;
+	margin-collapse: separate;
+}
+
+@mixin text36($top:0, $right:$top, $bottom:$top, $left:$right) {
+	line-height: grid(4.5);
+	font-size: grid(3);
+	margin: (-(grid(4.5) - grid(3))/2 + grid($top)) grid($right) (-(grid(4.5) - grid(3))/2 + grid($bottom)) grid($left);
+	-webkit-margin-collapse: separate;
+	margin-collapse: separate;
+}
+
+@mixin text30($top:0, $right:$top, $bottom:$top, $left:$right) {
+	line-height: grid(3.5);
+	font-size: grid(2.5);
+	color: #969696;
+	margin: (-(grid(3.5) - grid(2.5))/2 + grid($top)) grid($right) (-(grid(3.5) - grid(2.5))/2 + grid($bottom)) grid($left);
+	-webkit-margin-collapse: separate;
+	margin-collapse: separate;
+}
+
+@mixin box {
+	padding: grid(3);
+	margin: 8px 0;
+	background-color: #fff;
+}
+
+%text16 {
+	line-height: grid(6);
+	font-size: grid(4);
+}
+
+%text14 {
+	line-height: grid(5.5);
+	font-size: grid(3.5);
+}
+
+%text12 {
+	line-height: grid(4.5);
+	font-size: grid(3);
+}
+
+%text10 {
+	line-height: grid(3.5);
+	font-size: grid(2.5);
+	color: #969696;
+}
+
+
+
+// 百分比布局
+
+%paddingbox {
+	position: relative;
+	width: 100%;
+	height: 0;
+	margin: 0 auto;
+	overflow: hidden;
+}
+
+%absolute-img {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+}
+
+// 隐藏元素
+%hideeffectflex{
+	position: absolute;
+	top:-9999px;
+	left: -9999px;
+}
+
+// CSS image replacement
+//
+// Heads up! v3 launched with only `.hide-text()`, but per our pattern for
+// mixins being reused as classes with the same name, this doesn't hold up. As
+// of v3.0.1 we have added `.text-hide()` and deprecated `.hide-text()`.
+//
+// Source: https://github.com/h5bp/html5-boilerplate/commit/aa0396eae757
+
+// Deprecated as of v3.0.1 (has been removed in v4)
+@mixin hide-text() {
+  font: 0/0 a;
+  color: transparent;
+  text-shadow: none;
+  background-color: transparent;
+  border: 0;
+}
+
+// New mixin to use as of v3.0.1
+@mixin text-hide() {
+  @include hide-text;
+}
+
+.ui-hidden {
+  display: none !important;
+}
+
+%half-border-bottom {
+	position: relative;
+	&:after {
+		position: absolute;
+		display: block;
+		content: "";
+		width: 100%;
+		height: 1px;
+		left: 0;
+		bottom: 0;
+		background: svg-line($middlegray, '100%', '0.5', '0.5');
+		background-repeat: no-repeat;
+		background-size: 100% auto;
+	}
+}
+
+%half-border-top {
+	position: relative;
+	&:before {
+		position: absolute;
+		display: block;
+		content: "";
+		width: 100%;
+		height: 1px;
+		left: 0;
+		top: 0;
+		background: svg-line();
+		background-repeat: no-repeat;
+		background-size: 100% auto;
+	}
+}
+
+%box {
+	padding: 12px;
+	margin: 8px 0;
+	background-color: #fff;
+}
+
+
+// Clearfix
+//
+// For modern browsers
+// 1. The space content is one way to avoid an Opera bug when the
+//    contenteditable attribute is included anywhere else in the document.
+//    Otherwise it causes space to appear at the top and bottom of elements
+//    that are clearfixed.
+// 2. The use of `table` rather than `block` is only necessary if using
+//    `:before` to contain the top-margins of child elements.
+//
+// Source: http://nicolasgallagher.com/micro-clearfix-hack/
+
+// 闭合子元素的浮动
+@mixin clearfix ($extend:true) {
+  @if $extend {
+    @extend %clearfix;
+  } @else {
+    @if $lte7 {
+      *zoom: 1;
+    }
+    &:before,
+    &:after {
+      content: " ";// 1
+      display: table;// 2
+    }
+    &:after {
+      clear: both;
+    }
+  }
+}
+%clearfix{
+  @include clearfix(false);
+}
+
+// Center-align a block level element
+
+@mixin center-block() {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+
+// Opacity
+
+@mixin opacity($opacity) {
+  opacity: $opacity;
+  // IE8 filter
+  $opacity-ie: ($opacity * 100);
+  filter: alpha(opacity=$opacity-ie);
+}
+
+//取消交互
+.svg-layer {
+	@extend %absolute-img;
+	pointer-events: none;
+}
+
+//允许交互
+.svg-pointer {
+	@extend %absolute-img;
+	pointer-events: auto;
+}
+
+//Calc计算
+//SCSS
+//.calc{
+//	 @include calc(width,'100% - 20px');
+//}
+//CSS
+//.calc {
+//	width: calc(100% - 20px);
+//}
+@mixin calc($prop, $val) {
+  #{$prop}: calc(#{$val});
+ }

@@ -1,0 +1,61 @@
+{
+  "moment": {
+    "js": "/static/js/moment.outputAsyn.js"
+  },
+  "group-player": {
+    "js": "/static/js/group-player.outputAsyn.js"
+  },
+  "cnode_topic": {
+    "js": "/static/js/cnode_topic.outputAsyn.js"
+  },
+  "cnode_list": {
+    "js": "/static/js/cnode_list.outputAsyn.js"
+  },
+  "cnode_index": {
+    "js": "/static/js/cnode_index.outputAsyn.js"
+  },
+  "cnode_new": {
+    "js": "/static/js/cnode_new.outputAsyn.js"
+  },
+  "cnode_login": {
+    "js": "/static/js/cnode_login.outputAsyn.js"
+  },
+  "cnode_user": {
+    "js": "/static/js/cnode_user.outputAsyn.js"
+  },
+  "cnode_message": {
+    "js": "/static/js/cnode_message.outputAsyn.js"
+  },
+  "cnode_about": {
+    "js": "/static/js/cnode_about.outputAsyn.js"
+  },
+  "node_modules.commonChunk": {
+    "js": "/static/js/node_modules.commonChunk.js"
+  },
+  "pages/blog": {
+    "js": "/static/js/pages/blog.outputSync.js",
+    "css": "/static/css/pages/blog.css"
+  },
+  "index": {
+    "js": "/static/js/index.outputSync.js",
+    "css": "/static/css/index.css"
+  },
+  "pages/shoppingcart": {
+    "js": "/static/js/pages/shoppingcart.outputSync.js",
+    "css": "/static/css/pages/shoppingcart.css"
+  },
+  "pages/cloudmusic": {
+    "js": "/static/js/pages/cloudmusic.outputSync.js",
+    "css": "/static/css/pages/cloudmusic.css"
+  },
+  "pages/data": {
+    "js": "/static/js/pages/data.outputSync.js",
+    "css": "/static/css/pages/data.css"
+  },
+  "pages/cnode": {
+    "js": "/static/js/pages/cnode.outputSync.js"
+  },
+  "entry.commonChunk": {
+    "js": "/static/js/entry.commonChunk.js"
+  }
+}

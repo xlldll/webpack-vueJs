@@ -1,0 +1,41 @@
+//SCSS
+//.btn{
+	//@include button-size(5px,15px,16px,1.5,null);
+//}
+//CSS
+//.btn {
+// 	padding: 5px 15px;
+// 	line-height: 1.5;
+//}
+@mixin button-size($padding-vertical, $padding-horizontal, $font-size, $line-height, $border-radius) {
+	padding: $padding-vertical $padding-horizontal;
+	line-height: $line-height;
+	border-radius: $border-radius;
+}
+
+//文本颜色、背景颜色、边框颜色
+@mixin button-variant($color, $background, $border-color) {
+	color: $color;
+	background-color: $background;
+	border-color: $border-color;
+	transition: all .2s ease;
+
+	&:hover,
+	&:focus,
+	&:active {
+		color: $color;
+		background-color: darken($background, 3%);
+		border-color: darken($border-color, 5%);
+	}
+
+	&[disabled],
+	fieldset[disabled] & {
+		&,
+		&:hover,
+		&:focus,
+		&:active {
+			background-color: $background;
+			border-color: $border-color;
+		}
+	}
+ }

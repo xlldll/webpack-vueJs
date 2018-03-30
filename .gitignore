@@ -1,0 +1,8 @@
+node_modules/
+dist/
+npm.log
+desktop.ini
+.happypack/
+.UglifyJsCache/
+.idea/**/*
+development/

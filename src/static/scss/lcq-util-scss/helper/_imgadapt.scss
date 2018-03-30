@@ -1,0 +1,151 @@
+$designW: 360 !default;
+$designH: 562 !default;
+//1.依宽实现
+// 用到的参数：图片宽高
+@mixin img-after($img) {
+	img {
+		@extend %absolute-img;
+	}
+	&:after {
+		content: '';
+		display: block;
+		width: 100%;
+		background-color: transparent;
+		opacity: 0;
+		vertical-align: top;
+		pointer-events: none;
+		padding-top: percentage(nth($img,3)/nth($img,2));
+	}
+}
+//2.img标签实现
+// 用到的参数：图片宽高，类型:'contain'、'cover'、'fill'
+@mixin img-tag($img,$type:'contain') {
+	$imgW: nth($img, 2);
+	$imgH: nth($img, 3);
+	$widthPercent: percentage($imgW/$designW);
+	$heightPercent: percentage($imgH/$designH);
+	width: auto;
+	height: auto;
+	@if $type == 'cover' {
+		min-width: $widthPercent;
+		min-height: $heightPercent;
+		zoom: .1;
+	} @else if ($type == 'fill') {
+		width: $widthPercent;
+		height: $heightPercent;
+	} @else {
+		max-width: $widthPercent;
+		max-height: $heightPercent;
+		zoom: 10;
+	}
+}
+//3.img的background-size实现
+// 参数：图片宽高，地址，设计稿宽高，类型:'contain'、'cover'、'fill'
+@mixin img-bgsize($img,$type:'contain') {
+	$imgW: nth($img, 2);
+	$imgH: nth($img, 3);
+	$widthPercent: percentage($imgW/$designW);
+	$heightPercent: percentage($imgH/$designH);
+	width: $widthPercent;
+	height: $heightPercent;
+	background: url(nth($img,1)) no-repeat;
+	background-size: contain;
+	@if $type == 'cover' {
+		background-size: cover;
+		background-position: 50%;
+	} @else if ($type == 'fill') {
+		background-size: 100% 100%;
+	}
+}
+//4.img标签带坐标实现
+// 参数：图片宽高，横竖坐标值，原点，设计稿宽高，类型:'contain'、'cover'、'fill'
+@mixin img-tagxy($img,$type:'contain') {
+	$imgW: nth($img, 2);
+	$imgH: nth($img, 3);
+	$left: nth($img, 4);
+	$top: nth($img, 5);
+	$originX: nth($img, 6);
+	$originY: nth($img, 7);
+	$widthPercent: percentage($imgW/$designW);
+	$heightPercent: percentage($imgH/$designH);
+	$translateX: percentage((($left - $originX*$designW)/$imgW));
+	$translateY: percentage((($top - $originY*$designH)/$imgH));
+	position: absolute;
+	width: auto;
+	height: auto;
+	@if $type =="cover" {
+		min-width: $widthPercent;
+		min-height: $heightPercent;
+		zoom: .1;
+		left: percentage($originX);
+		top: percentage($originY);
+		transform: translateX($translateX) translateY($translateY);
+	} @else if ($type =="fill") {
+		width: $widthPercent;
+		height: $heightPercent;
+	} @else {
+		max-width: $widthPercent;
+		max-height: $heightPercent;
+		zoom: 10;
+		left: percentage($originX);
+		top: percentage($originY);
+		transform: translateX($translateX) translateY($translateY);
+	}
+}
+//5.img的background-size带坐标实现
+// 参数：图片宽高，横竖坐标值，原点，设计稿宽高，类型:'contain'、'cover'、'fill'
+@mixin img-bgsizexy($img,$type:'contain') {
+	$imgW: nth($img, 2);
+	$imgH: nth($img, 3);
+	$left: nth($img, 4);
+	$top: nth($img, 5);
+	$originX: nth($img, 6);
+	$originY: nth($img, 7);
+	$widthPercent: percentage($imgW/$designW);
+	$heightPercent: percentage($imgH/$designH);
+	$translateX: percentage((($left - $originX*$designW)/$imgW));
+	$translateY: percentage((($top - $originY*$designH)/$imgH));
+	position: absolute;
+	left: percentage($left/$designW);
+	top: percentage($top/$designH);
+	width: $widthPercent;
+	height: $heightPercent;
+	background: url(nth($img, 1)) no-repeat;
+	@if $type =="cover" {
+		background-size: cover;
+		background-position-x: $translateX;
+		background-position-y: $translateY;
+	} @else if ($type =="fill") {
+		background-size: 100% 100%;
+	} @else {
+		background-size: contain;
+		background-position-x: -$translateX;
+		background-position-y: -$translateY;
+	}
+}
+//6.svg带坐标实现
+// 参数：图片宽高，横竖坐标值，原点，设计稿宽高
+@mixin img-svgxy($img) {
+	$imgW: nth($img, 2);
+	$imgH: nth($img, 3);
+	$left: nth($img, 4);
+	$top: nth($img, 5);
+	$originX: nth($img, 6);
+	$originY: nth($img, 7);
+	$widthPercent: percentage($imgW/$designW);
+	$heightPercent: percentage($imgH/$designH);
+	$translateX: percentage($originX * $designW / $imgW);
+	$translateY: percentage($originY * $designH / $imgH);
+	$translateX1: percentage((($left - $originX*$designW)/$imgW));
+	$translateY1: percentage((($top - $originY*$designH)/$imgH));
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: $widthPercent;
+	height: $heightPercent;
+	transform: translateX($translateX) translateY($translateY);
+	overflow: visible;
+	image,rect{
+		transform: translateX($translateX1) translateY($translateY1);
+	}
+}

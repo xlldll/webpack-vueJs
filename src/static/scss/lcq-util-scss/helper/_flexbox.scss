@@ -1,0 +1,33 @@
+@charset "UTF-8";
+
+//参考compass的_flexbox.scss
+//https://github.com/Igosuki/compass-mixins/blob/master/lib/compass/css3/_flexbox.scss
+//%flex-wrap {
+	//display: box;
+	//display: -webkit-box;
+	//display: -webkit-flex;
+	//display: flex;
+//}
+//box-orient: horizontal | vertical | inherit; 该属性定义父元素的子元素是如何排列的
+//box-pack: start | end | center | justify; 设置沿 box-orient 轴的父元素中子元素的排列方式
+//因此，如果 box-orient 是水平方向，则父元素的子元素是水平的排列方式，反之亦然
+//@mixin justify-content($v) {
+	//-webkit-box-pack: $v;
+	//-webkit-justify-content: $v;
+	//justify-content: $v;
+//}
+
+//box-align: start | end | center | baseline | stretch; 基本上而言是 box-pack 的同级属性
+//设置框的子代在框中的排列方式。如果方向是水平的，该属性就会决定垂直排列，反之亦然
+//@mixin align-items($v) {
+//	-webkit-box-align: $v;
+	//-webkit-align-items: $v;
+	//align-items: $v;
+//}
+
+//box－flex: 0 | 任意数字; 该属性让子容器针对父容器的宽度按一定规则进行划分
+//@mixin flex($v) {
+//	-webkit-box-flex: $v;
+	//-webkit-flex: $v;
+	//flex: $v;
+//}

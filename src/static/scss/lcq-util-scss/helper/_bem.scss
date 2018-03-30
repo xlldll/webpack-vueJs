@@ -1,0 +1,234 @@
+//bem
+$component: 'ac' !default;
+$component-separator: '-';
+$element-separator: '__';
+$modifier-separator: '--';
+$when-separator: '.is-';
+//
+//.cb-textarea
+//@include b(textarea) {
+//  font-size: 14px;
+//  @include font($font-size-md);
+//  padding: 12px;
+//  @include sizes('padding', px(24));
+//  .cb-textarea__count
+//  @include e(count) {
+//    @include sizes('right', px(24));
+//    @include font($font-size-sm);
+//
+//    position: absolute;
+//    bottom: 0;
+//
+//    color: $color-text-3;
+//
+//    span {
+//      color: $color-text-1;
+//    }
+//  }
+//
+//  position: relative;
+//
+//  textarea {
+//    display: block;
+//
+//    outline: none;
+//
+//    border: 0;
+//
+//    background-color: transparent;
+//
+//    padding: 0;
+//
+//    width: 100%;
+//
+//    overflow: visible;
+//
+//    line-height: inherit;
+//    color: $color-text-1;
+//    word-break: break-all;
+//    word-wrap: break-word;
+//
+//    appearance: none;
+//    resize: none
+//
+//    &::-webkit-input-placeholder {// sass-lint:disable-line no-vendor-prefixes
+//      color: $color-text-4;
+//    }
+//    &:disabled {
+//      color: $color-text-6;
+//    }
+//  }
+//}
+
+@function bem($b, $e: null, $m: null, $c: $component) {
+	$block: $c + $component-separator + $b;
+	$element: '';
+	$modifier: '';
+	@if $e {
+		$element: $element-separator + $e;
+	}
+	@if $m {
+		$modifier: $modifier-separator + $m;
+	}
+	
+	@return #{$block + $element + $modifier};
+}
+
+@function selectorToString($selector) {
+	$selector: inspect($selector); //cast to string
+	$selector: str-slice($selector, 2, -2); //去除首尾空格
+	@return $selector;
+}
+
+//$selector中是否有$modifier-separator即'--'
+@function containsModifier($selector) {
+	$selector: selectorToString($selector);
+	
+	@if str-index($selector, $modifier-separator) {
+		@return true;
+	} @else {
+		@return false;
+	}
+}
+
+//$selector中是否有$modifier-separator即'.is-'
+@function containsWhen($selector) {
+	$selector: selectorToString($selector);
+	
+	@if str-index($selector, $when-separator) {
+		@return true;
+	} @else {
+		@return false;
+	}
+}
+
+//提取b+e名称'--'
+@function getBlock($selector) {
+	$selector: selectorToString($selector);
+	$modifierStart: str-index($selector, $modifier-separator) - 1;
+	
+	@return str-slice($selector, 0, $modifierStart);
+}
+
+//提取'.is-'之前的名称
+@function getWhenBlock($selector) {
+	$selector: selectorToString($selector);
+	$whenStart: str-index($selector, $when-separator) - 1;
+	
+	@return str-slice($selector, 0, $whenStart);
+}
+
+//提取getModifierBlock
+//比如getModifierBlock(&)
+//todo-bem:返回str-slice(&,0,0)???
+@function getModifierBlock($selector) {
+	$selector: selectorToString($selector);
+	
+	@return str-slice($selector, 0, str_length($selector)-1);
+}
+
+//block函数
+
+@function b($block, $c: $component) {
+	@return #{'.' + $c + $component-separator + $block};
+}
+
+//element函数
+//比如list中的#{e(item)}{padding: 0;}返回&.__item
+
+@function e($element) {
+	$selector: &;
+	//如果$modifier-separator中有&
+	@if containsModifier($selector) {
+		$block: getBlock($selector);
+		
+		@return #{$block+$element-separator+$element};
+	} @else if containsWhen($selector) {
+		$block: getWhenBlock($selector);
+		
+		@return #{$block+$element-separator+$element};
+	} @else {
+		@return #{$selector+$element-separator+$element};
+	}
+}
+
+//modifier函数
+@function m($modifier) {
+	$selector: getModifierBlock(&);
+	
+	@if containsModifier($selector) {
+		$block: getBlock($selector);
+		@return #{$selector}#{'.'}#{$block+$modifier-separator+$modifier};
+	}
+	
+	@return #{$selector}#{$modifier-separator+$modifier};
+}
+
+
+//@include b(textarea)返回.cb-textarea
+@mixin b($block, $c: $component) {
+	.#{$c + $component-separator + $block} {
+		@content;
+	}
+}
+
+//@include e(count)返回.cb-textarea__count
+@mixin e($elements...) {
+	@each $element in $elements {
+		$selector: &;
+		@if containsModifier($selector) {
+			$block: getBlock($selector);
+			@at-root {
+				#{$selector} {
+					#{$block+$element-separator+$element} {
+						@content;
+					}
+				}
+			}
+		} @else if containsWhen($selector) {
+			$block: getWhenBlock($selector);
+			@at-root {
+				#{$selector} {
+					#{$block+$element-separator+$element} {
+						@content;
+					}
+				}
+			}
+		} @else {
+			@at-root {
+				#{$selector+$element-separator+$element} {
+					@content;
+				}
+			}
+		}
+	}
+}
+
+@mixin m($modifiers...) {
+	@each $modifier in $modifiers {
+		@at-root {
+			$selector: &;
+			
+			@if containsModifier($selector) {
+				$block: getBlock($selector);
+				
+				#{$selector}#{$block+$modifier-separator+$modifier} {
+					@content;
+				}
+			} @else {
+				#{$selector}#{$modifier-separator+$modifier} {
+					@content;
+				}
+			}
+		}
+	}
+}
+
+//@include when(active) 返回 &.is-active
+@mixin when($states...) {
+	@each $state in $states {
+		&.is-#{$state} {
+			@content;
+		}
+	}
+}

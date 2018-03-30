@@ -1,0 +1,238 @@
+//http://www.zhangxinxu.com/wordpress/2013/11/margin-auto-absolute-%E7%BB%9D%E5%AF%B9%E5%AE%9A%E4%BD%8D-%E6%B0%B4%E5%B9%B3%E5%9E%82%E7%9B%B4%E5%B1%85%E4%B8%AD/
+%absolute-center {
+	position: absolute;
+	left: 0;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	margin: auto;
+}
+
+//http://w3cplus.github.io/SassMagic/#undefined-mixin-box-center
+//元素垂直水平居中
+@mixin box-center($justify:center, $align: center) {
+    display:flex;
+
+    @if($align !=false) {
+        align-items: $align;
+    }
+    @if($justify !=false) {
+        justify-content: $justify;
+    }
+}
+
+//http://w3cplus.github.io/SassMagic/#undefined-mixin-center-translate
+/// 使用translate实现水平垂直居中
+/// @param {String} $direction [both] - 水平垂直,其它值`horizontal`和`vertical`
+/// @example
+/// //SCSS
+/// .center{
+///   @include center-translate;
+/// }
+/// //CSS
+/// .center {
+///   position: absolute;
+///   top: 50%;
+///   left: 50%;
+///   transform: translate3d(-50%, -50%, 0);
+/// }
+@mixin center-translate($direction: both) {
+    position: absolute;
+    @if $direction == both {
+        top: 50%;
+        left: 50%;
+        transform: translate3d(-50%, -50%, 0);
+    }
+    @else if $direction == horizontal {
+        left: 50%;
+        transform: translate3d(-50%, 0, 0);
+    }
+    @else if $direction == vertical {
+        top: 50%;
+        transform: translate3d(0, -50%, 0);
+    }
+}
+
+
+// http://w3cplus.github.io/SassMagic/#undefined-mixin-ellipsis
+/// 控制文字行数溢出点点点
+/// @param  {number} $lines      [1] - 默认一行对于点点点结束
+/// @param  {number} $substract  [0] - 默认宽度为100% - 0
+/// @example
+///
+/// //SCSS
+/// div {
+/// 	@include ellipsis;
+/// }
+///
+///	.box {
+/// 	@include ellipsis(3);
+///	}
+///	//CSS
+///	div {
+///	  overflow: hidden;
+///	  display: -webkit-box;
+///	  display: box;
+///	  -webkit-line-clamp: 1;
+///	  line-clamp: 1;
+///	  -webkit-box-orient: vertical;
+///	  box-orient: vertical;
+///	}
+///
+///	.box {
+///	  overflow: hidden;
+///	  display: -webkit-box;
+///	  display: box;
+///	  -webkit-line-clamp: 3;
+///	  line-clamp: 3;
+///	  -webkit-box-orient: vertical;
+///	  box-orient: vertical;
+///	}
+///
+@mixin ellipsis($lines: 1, $substract: 0) {
+    @if $lines == 1 {
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        width: 100% - $substract;
+    	overflow: hidden;
+    } @else {
+        overflow:hidden;
+	    display:-webkit-box;
+	    display:box;
+	    -webkit-line-clamp: $lines;
+	    line-clamp: $lines;
+	    -webkit-box-orient: vertical;
+	    box-orient: vertical;
+    }
+}
+
+//去除css roatate 产生的锯齿
+//https://www.cnblogs.com/surfaces/archive/2015/03/02/4308936.html
+%rotate-fix {
+	//@include perspective(400px);
+	//transform-style: preserve-3d;
+	//@include transform(translateZ(0));
+	//border: 1px solid transparent;
+	outline: 1px solid transparent;
+}
+
+// 模拟扑克牌飞出去
+@mixin animate-myfadeOutUp() {
+	@include keyframes(myfadeOutUp) {
+		0% {
+			opacity: 1;
+			transform: translateY(0) translateX(0) rotate3d(0, 0, 0, 0deg);
+			//@include transform(translateY(0),translateX(0));
+		}
+		100% {
+			opacity: 0;
+			transform: translateY(-50px) translateX(150px) rotate3d(0, 1, 0, 100deg);
+			//@include transform(translateY(-2000px),translateX(20px));
+		}
+	}
+	.myfadeOutUp {
+		@include animation-name(myfadeOutUp);
+		@extend %animated;
+	}
+}
+
+@mixin animate-myopacity() {
+	@include keyframes(myopacity) {
+		0% {
+			opacity: 0;
+		}
+		100% {
+			opacity: 1;
+		}
+	}
+	.myopacity {
+		@include animation-name(myopacity);
+		@extend %animated;
+	}
+}
+
+// myfadeOutLeftBig
+@mixin animate-myfadeOutLeftBig() {
+	@include keyframes(myfadeOutLeftBig) {
+		0% {
+			opacity: 1;
+			transform: translateX(0px) translateY(-50%);
+		}
+		100% {
+			opacity: 0;
+			transform: translateX(-2000px) translateY(-50%);
+		}
+	}
+	.myfadeOutLeftBig {
+		@include animation-name(myfadeOutLeftBig);
+		@extend %animated;
+	}
+}
+
+@mixin animate-myborderclr() {
+	@include keyframes(myborderclr) {
+		50% {
+			border-color:transparent;
+		}
+	}
+	.myborderclr {
+		@include animation-name(myborderclr);
+		@extend %animated;
+	}
+}
+
+@mixin animate-myborderclr2() {
+	@include keyframes(myborderclr2) {
+		50% {
+			border-top-color:transparent;
+		}
+	}
+	.myborderclr2 {
+		@include animation-name(myborderclr2);
+		@extend %animated;
+	}
+}
+
+// http://w3cplus.github.io/SassMagic/#undefined-mixin-position
+/// 设置`position`
+/// @access public
+/// @author 大漠
+/// @example
+/// //SCSS
+///
+/// .absolute{
+///   @include position(absolute,top 10px right 20px);
+/// }
+/// .absolute{
+///   @include position(absolute,top 0 right 0 bottom 0 left 0);
+/// }
+///
+/// //Output CSS
+///
+/// .absolute {
+///   top: 10px;
+///   right: 20px;
+///   position: absolute;
+/// }
+///
+/// .absolute {
+///   top: 0;
+///   right: 0;
+///   bottom: 0;
+///   left: 0;
+///   position: absolute;
+/// }
+/// @link http://sassmeister.com/gist/a70eb473b806c4e2a57d
+/// @link
+/// @param {string} $position - 可选值: `static` | `relative` | `absolute` | `fixed`
+/// @param {string} $args - 可设置值: `top` | `right` | `bottom` | `left`
+
+@mixin position($position,$args){
+	@each $o in top right bottom left {
+		$i: index($args, $o);
+		@if $i and $i + 1 <= length($args) and type-of(nth($args, $i + 1)) == number {
+			#{$o}: nth($args, $i + 1);
+		}
+	}
+	position: $position;
+}
